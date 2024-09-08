@@ -18,9 +18,9 @@ przyjmujemy następujące nazewnictwo akordów:
 
 E F Fis G Gis A B H C Cis D Dis
 
-Przykład działania:
+**Przykład działania:**
 
-Zawartość pliku wejściowego (lu dane wpisane z klawiatury):
+Zawartość pliku wejściowego (lub dane wpisane z klawiatury):
 
 C a d G
 
@@ -31,10 +31,15 @@ C d G
 Poziom transkrypcji: 7
 
 G e a D
+
 G C D
+
 G a D
+
 Poziom transkrypcji: -3
 
 A fis h E
+
 A D E
+
 A h E
