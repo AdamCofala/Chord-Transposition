@@ -2,30 +2,33 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <unordered_map>
-
 using namespace std;
 
-// Mapa dla podstawowych akordów durowych i molowych
-unordered_map<string, int> akordy = {
-    {"c", 0}, {"cis", 1}, {"d", 2}, {"dis", 3}, {"e", 4}, {"f", 5},
-    {"fis", 6}, {"g", 7}, {"gis", 8}, {"a", 9}, {"b", 10}, {"h", 11}
-};
+int find(const vector<string> A, string s){
+    for(int i=0; i<A.size(); i++){
+        if(A[i]==s) return i;
+    }
+    return -1;
+}
 
-// Odwrotna mapa dla konwersji liczbowej na akordy
-vector<string> odwrotneAkordy = {
-    "C", "Cis", "D", "Dis", "E", "F", "Fis", "G", "Gis", "A", "B", "H"
+vector<string> Akordy = {
+    "c", "cis", "d", "dis", "d", "f", "fis", "g", "gis", "a", "b", "h"
 };
 
 string transponujAkord(string akord, int transpozycja) {
+
     bool isMolowy = islower(akord[0]);
     akord[0]=tolower(akord[0]);
-    int oryginalnyIndex = akordy[akord];
+
+    int oryginalnyIndex;
+    if(find(Akordy,akord)!=-1) oryginalnyIndex = find(Akordy,akord);
+    else return "---";
+
     int nowyIndex = (oryginalnyIndex + transpozycja + 12) % 12;
 
-    string nowyAkord = odwrotneAkordy[nowyIndex];
-    if (isMolowy) {
-        nowyAkord[0] = tolower(nowyAkord[0]);
+    string nowyAkord = Akordy[nowyIndex];
+    if (!isMolowy) {
+        nowyAkord[0] = toupper(nowyAkord[0]);
     }
 
     return nowyAkord;
@@ -33,9 +36,13 @@ string transponujAkord(string akord, int transpozycja) {
 
 void transponujAkordy(vector<string>& linie, int transpozycja) {
     for (string& linia : linie) {
+
         string nowaLinia;
-        string akord;
+        
+        linia+=" ";
+
         for (char c : linia) {
+            string akord;
             if (c == ' ') {
                 if (!akord.empty()) {
                     nowaLinia += transponujAkord(akord, transpozycja) + " ";
@@ -44,9 +51,6 @@ void transponujAkordy(vector<string>& linie, int transpozycja) {
             } else {
                 akord += c;
             }
-        }
-        if (!akord.empty()) {
-            nowaLinia += transponujAkord(akord, transpozycja);
         }
         linia = nowaLinia;
     }
@@ -91,7 +95,7 @@ int main() {
         // Wczytaj dane z pliku dane.txt
         ifstream plik("dane.txt");
         if (!plik) {
-            cerr << "Nie mozna otworzyc pliku dane.txt" << endl;
+            cout << "Nie mozna otworzyc pliku dane.txt" << endl;
             return 1;
         }
 
