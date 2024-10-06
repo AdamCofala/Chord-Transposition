@@ -12,25 +12,26 @@ int find(const vector<string> A, string s){
 }
 
 vector<string> Akordy = {
-    "c", "cis", "d", "dis", "d", "f", "fis", "g", "gis", "a", "b", "h"
+    "e", "f", "fis", "g", "gis", "a", "b", "h", "c", "cis", "d", "dis"
 };
+
 
 string transponujAkord(string akord, int transpozycja) {
 
-    bool isMolowy = islower(akord[0]);
+    bool isMolowy = islower(akord[0]); // sprawdza czy akord był molowy czy durowy
     akord[0]=tolower(akord[0]);
 
+    // Znajdowanie indexu akordu
     int oryginalnyIndex;
-    if(find(Akordy,akord)!=-1) oryginalnyIndex = find(Akordy,akord);
+    if(find(Akordy,akord)!=-1) oryginalnyIndex = find(Akordy,akord); 
     else return "---";
 
+    // Obliczanie nowego indexu akordu i tworzenie go
     int nowyIndex = (oryginalnyIndex + transpozycja + 12) % 12;
-
     string nowyAkord = Akordy[nowyIndex];
-    if (!isMolowy) {
-        nowyAkord[0] = toupper(nowyAkord[0]);
-    }
 
+    if (!isMolowy) nowyAkord[0] = toupper(nowyAkord[0]); // zamienianie akordu na durowy jeśli taki był wcześniej
+    
     return nowyAkord;
 }
 
@@ -38,21 +39,21 @@ void transponujAkordy(vector<string>& linie, int transpozycja) {
     for (string& linia : linie) {
 
         string nowaLinia;
+        string akord;
         
-        linia+=" ";
+        linia += " "; // Dodajemy spację na końcu, aby przetworzyć ostatni akord
 
         for (char c : linia) {
-            string akord;
             if (c == ' ') {
                 if (!akord.empty()) {
                     nowaLinia += transponujAkord(akord, transpozycja) + " ";
-                    akord.clear();
+                    akord.clear();  // Resetujemy akord po przetworzeniu
                 }
             } else {
                 akord += c;
             }
         }
-        linia = nowaLinia;
+        linia = nowaLinia; // Zastępujemy oryginalną linię przetworzonymi akordami
     }
 }
 
@@ -74,6 +75,7 @@ void zapisdopliku(vector<string>& linie){
     plikWyjsciowy.close();
 
     cout << "Zapisano wynik w pliku " << nazwaPlikuWyjsciowego<< endl;
+
     }
     
 }
@@ -130,10 +132,14 @@ int main() {
     }
 
     // Zapisz wyniki do pliku
-    cout << "Czy chesz zapisac do zapisac transponowane akordy do pliku? (t/n): ";
+    cout << "Czy chesz zapisac transponowane akordy do pliku? (t/n): ";
     char anw;
     cin >> anw;
     if(anw=='t') zapisdopliku(linie);
+
+    // Zamyka program dopiero po akcji użytkownika
+    int tmp;
+    cin>>tmp;
 
     return 0;
 }
